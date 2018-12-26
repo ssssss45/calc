@@ -188,7 +188,7 @@
 
 		{
 			"label": ",",
-			"action": "set-float-pont",
+			"action": "set-float-point",
 			"description": "Set the float point",
 			"key": ".",
 			"background": "white"

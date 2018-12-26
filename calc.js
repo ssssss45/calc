@@ -27,9 +27,15 @@ class Calculator
 
 		this.current = 0;
 		this.last = 0;
-
+//флаг того что текущее число - дробь
+		this.isFraction = false;
+//флаг того что нужно добавить точку при следующем нажатии на кнопку числа
+		this.toAddPoint = false;
+//слушатели
 		$element.on("key", this.keyPressedHandler.bind(this));
-
+		$element.on("remove-last", this.clearLastHandler.bind(this));
+		$element.on("clear-input", this.inputClearHandler.bind(this));
+		$element.on("set-float-point", this.floatPointHandler.bind(this));
 //генерация кнопок
 		this.buttons = json.buttons;
 		for (var i = 0; i < this.buttons.length; i++)
@@ -56,14 +62,57 @@ class Calculator
 			}
 		}
 	}
-
+//обработчик нажатия на цифровые кнопки
 	keyPressedHandler(event)
 	{
-		console.log(this.current);
-		this.current *= 10;
-		this.current += Number(event.keyValue);
+		let temp = this.current.toString()
+		if (this.toAddPoint)
+		{
+			temp += ".";
+			this.toAddPoint = false;
+			this.isFraction = true;
+		}
+
+		temp += Number(event.keyValue);
+
+		this.current = Number(temp);
 		this.$display.html(this.current);
 	}
+//обработчик нажатий на стирание
+	inputClearHandler()
+	{
+		this.toAddPoint = false;
+		this.isFraction = false;
+		this.current = 0;
+		this.$display.html(this.current);
+	}
+//обработчик нажатий на кнопки стирания последнего
+	clearLastHandler()
+	{
+		let temp = this.current.toString();
+		temp = temp.substring(0, temp.length - 1);
 
+		if (temp[temp.length - 1] == ".")
+		{
+			this.isFraction = false;
+			temp = temp.substring(0, temp.length - 1);			
+		}
+
+		if (temp == "")
+		{
+			temp = "0";
+		}
+		this.current = Number(temp);
+		this.$display.html(this.current);
+		this.$display.html(this.current);
+	}
+//обработчик нажатий на запятую
+	floatPointHandler()
+	{
+		if (!this.isFraction)
+		{
+			this.toAddPoint = true;	
+		}
+	}
 
 }
