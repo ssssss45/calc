@@ -47,11 +47,18 @@ class Calculator
 		$element.on("remove-last", this.clearLastHandler.bind(this));
 		$element.on("clear-input", this.inputClearHandler.bind(this));
 		$element.on("set-float-point", this.floatPointHandler.bind(this));
-
+//слушатели на простые действия
 		$element.on("addition", this.additionHandler.bind(this));
 		$element.on("subtraction", this.substractionHandler.bind(this));
 		$element.on("multiply", this.multiplyHandler.bind(this));
 		$element.on("divide", this.divisionHandler.bind(this));
+//слушатели на остальные действия
+		$element.on("square", this.squareHandler.bind(this));
+		$element.on("percent", this.percentHandler.bind(this));
+		$element.on("reciprocal", this.reciprocalHandler.bind(this));
+		$element.on("invert-sign", this.invertHandler.bind(this));
+		
+		
 //генерация кнопок
 		this.buttons = json.buttons;
 		for (var i = 0; i < this.buttons.length; i++)
@@ -224,4 +231,27 @@ class Calculator
 		this.removeLast();
 	}
 
+	percentHandler()
+	{
+		this.current /= 100;
+		this.$display.html(this.current);
+	}
+
+	squareHandler()
+	{
+		this.current = Math.sqrt(this.current);
+		this.$display.html(this.current);	
+	}
+
+	reciprocalHandler()
+	{
+		this.current = 1 / this.current;
+		this.$display.html(this.current);
+	}
+
+	invertHandler()
+	{
+		this.current *= -1;
+		this.$display.html(this.current);
+	}
 }

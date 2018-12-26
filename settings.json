@@ -201,6 +201,15 @@
 			"key": "+",
 			"background": "gray",
 			"width": 2
+		},
+    
+	    {
+			"label": "=",
+			"action": "result",
+			"description": "Show Result",
+			"key": "enter",
+			"background": "gray",
+			"width": 1
 		}
 
 	]
