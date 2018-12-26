@@ -24,18 +24,34 @@ class Calculator
 			.html(0);
 		$element.append(this.$display);
 		$element.append('<br>');
+//генерация элемента в котором будет предыдущий элемент
+		this.$lastDisplay = $('<div/>')
+			.css("width", columns * pixelSize)
+			.css("height", pixelSize)
+			.html("");
+		$element.append(this.$lastDisplay);
+		$element.append('<br>');
 
 		this.current = 0;
-		this.last = 0;
+		this.last = undefined;
 //флаг того что текущее число - дробь
 		this.isFraction = false;
 //флаг того что нужно добавить точку при следующем нажатии на кнопку числа
 		this.toAddPoint = false;
+//флаг того что на экране уже результат. при нажатии на цифры или действия он будет сразу передвинут в last
+		this.isResult = false;
+//текущее действие
+		this.action = "";
 //слушатели
 		$element.on("key", this.keyPressedHandler.bind(this));
 		$element.on("remove-last", this.clearLastHandler.bind(this));
 		$element.on("clear-input", this.inputClearHandler.bind(this));
 		$element.on("set-float-point", this.floatPointHandler.bind(this));
+
+		$element.on("addition", this.additionHandler.bind(this));
+		$element.on("subtraction", this.substractionHandler.bind(this));
+		$element.on("multiply", this.multiplyHandler.bind(this));
+		$element.on("divide", this.divisionHandler.bind(this));
 //генерация кнопок
 		this.buttons = json.buttons;
 		for (var i = 0; i < this.buttons.length; i++)
@@ -48,7 +64,7 @@ class Calculator
 			currentColumn += width;
 
 			let button = $('<input/>')
-				.attr({ type: 'button', name:'btn1', value:this.buttons[i].label, title: this.buttons[i].description})
+				.attr({ type: 'button', value:this.buttons[i].label, title: this.buttons[i].description})
 				.click(function(){$element.trigger(event)})
 				.css("width", width * pixelSize)
 				.css("height", height * pixelSize)
@@ -65,6 +81,10 @@ class Calculator
 //обработчик нажатия на цифровые кнопки
 	keyPressedHandler(event)
 	{
+		if (this.isResult && (this.last == undefined))
+		{
+			this.pushToLast();
+		}
 		let temp = this.current.toString()
 		if (this.toAddPoint)
 		{
@@ -81,8 +101,10 @@ class Calculator
 //обработчик нажатий на стирание
 	inputClearHandler()
 	{
+		this.last = undefined;
 		this.toAddPoint = false;
 		this.isFraction = false;
+		this.isResult = false;
 		this.current = 0;
 		this.$display.html(this.current);
 	}
@@ -104,7 +126,6 @@ class Calculator
 		}
 		this.current = Number(temp);
 		this.$display.html(this.current);
-		this.$display.html(this.current);
 	}
 //обработчик нажатий на запятую
 	floatPointHandler()
@@ -113,6 +134,94 @@ class Calculator
 		{
 			this.toAddPoint = true;	
 		}
+	}
+
+	pushToLast()
+	{
+		this.last = this.current;
+		this.current = 0;
+		this.$display.html(this.current);
+		this.$lastDisplay.html(this.last + this.action);
+	}
+//метод очистки last и поля его отображения
+	removeLast()
+	{
+		this.isResult = true;
+		this.last = undefined;
+		this.$lastDisplay.html("");
+		this.$display.html(this.current);	
+	}
+
+	additionHandler()
+	{
+		if ((this.last == undefined))
+		{
+			this.action = " +";
+			this.pushToLast();	
+		}
+		else
+		{
+			this.resolveAction();		
+		}
+	}
+
+	substractionHandler()
+	{
+		if (this.last == undefined)
+		{
+			this.action = " -";
+			this.pushToLast();	
+		}
+		else
+		{
+			this.resolveAction();
+		}
+
+	}
+
+	multiplyHandler()
+	{
+		if (this.last == undefined)
+		{
+			this.action = " *";
+			this.pushToLast();	
+		}
+		else
+		{
+			this.resolveAction();
+		}
+	}
+
+	divisionHandler()
+	{
+		if (this.last == undefined)
+		{
+			this.action = " /";
+			this.pushToLast();	
+		}
+		else
+		{
+			if (this.current != 0)
+			{
+				this.resolveAction();
+			}
+			else
+			{
+				alert("Division by zero error");
+			}
+		}
+	}
+
+	resolveAction()
+	{
+		switch (this.action)
+		{
+			case " +": this.current = this.last + this.current; break;
+			case " -": this.current = this.last - this.current; break;
+			case " *": this.current = this.last * this.current; break;
+			case " /": this.current = this.last / this.current; break;
+		}
+		this.removeLast();
 	}
 
 }

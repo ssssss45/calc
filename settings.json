@@ -80,8 +80,8 @@
 
 		{
 			"label": "/",
-			"action": "devide",
-			"description": "Devide",
+			"action": "divide",
+			"description": "Divide",
 			"key": "/",
 			"background": "gray"
 		},
