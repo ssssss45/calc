@@ -1,0 +1,208 @@
+{
+
+	"pixels_per_size_unit" : 50,
+	"container_class" : ".calculator-container",
+
+	"show_history": true,
+	"history_length": 10,
+
+	"columns": 5,
+	"column_width": 20,
+	"column_height": 20,
+	"column_offset": 5,
+	"row_offset": 5,
+
+	"buttons": [
+
+		{
+			"label": "←",
+			"action": "remove-last",
+			"description": "Remove the last digit",
+			"key": "backspace",
+			"width": 2,
+			"height": 1,
+			"background": "gray"
+		},
+
+		{
+			"label": "C",
+			"action": "clear-input",
+			"description": "Cliear the input field",
+			"key": "delete",
+			"width": 1,
+			"height": 1,
+			"background": "gray"
+		},
+
+		{
+			"label": "±",
+			"action": "invert-sign",
+			"description": "Invert Sign",
+			"key": "",
+			"background": "gray"
+		},
+
+		{
+			"label": "√",
+			"action": "square",
+			"description": "Square",
+			"key": "",
+			"background": "gray"
+		},
+
+
+
+
+
+		{
+			"label": "7",
+			"value": "7",
+			"description": "7",
+			"key": "7",
+			"background": "white"
+		},
+
+		{
+			"label": "8",
+			"value": "8",
+			"description": "8",
+			"key": "8",
+			"background": "white"
+		},
+
+		{
+			"label": "9",
+			"value": "9",
+			"description": "9",
+			"key": "9",
+			"background": "white"
+		},
+
+		{
+			"label": "/",
+			"action": "devide",
+			"description": "Devide",
+			"key": "/",
+			"background": "gray"
+		},
+
+		{
+			"label": "%",
+			"action": "percent",
+			"description": "Percent",
+			"key": "%",
+			"background": "gray"
+		},
+
+
+
+
+		{
+			"label": "4",
+			"value": "4",
+			"description": "4",
+			"key": "4",
+			"background": "white"
+		},
+
+		{
+			"label": "5",
+			"value": "5",
+			"description": "5",
+			"key": "5",
+			"background": "white"
+		},
+
+		{
+			"label": "6",
+			"value": "6",
+			"description": "6",
+			"key": "6",
+			"background": "white"
+		},
+
+		{
+			"label": "*",
+			"action": "multiply",
+			"description": "Multiply",
+			"key": "*",
+			"background": "gray"
+		},
+
+		{
+			"label": "1/x",
+			"action": "reciprocal",
+			"description": "Get the reciprocal of a number",
+			"key": "",
+			"background": "gray"
+		},
+
+
+
+
+		{
+			"label": "1",
+			"value": "1",
+			"description": "1",
+			"key": "1",
+			"background": "white"
+		},
+
+		{
+			"label": "2",
+			"value": "2",
+			"description": "2",
+			"key": "2",
+			"background": "white"
+		},
+
+		{
+			"label": "3",
+			"value": "3",
+			"description": "3",
+			"key": "3",
+			"background": "white"
+		},
+
+		{
+			"label": "-",
+			"action": "subtraction",
+			"description": "Subtraction",
+			"key": "-",
+			"background": "gray",
+			"width": 2
+		},
+
+
+
+
+
+		{
+			"label": "0",
+			"value": "0",
+			"description": "0",
+			"key": "0",
+			"background": "white",
+			"width": 2
+		},
+
+		{
+			"label": ",",
+			"action": "set-float-pont",
+			"description": "Set the float point",
+			"key": ".",
+			"background": "white"
+		},
+
+		{
+			"label": "+",
+			"action": "addition",
+			"description": "Addition",
+			"key": "+",
+			"background": "gray",
+			"width": 2
+		}
+
+	]
+
+}
