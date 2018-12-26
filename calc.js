@@ -245,8 +245,16 @@ class Calculator
 
 	reciprocalHandler()
 	{
-		this.current = 1 / this.current;
-		this.$display.html(this.current);
+		if (this.current != 0)
+		{
+			this.current = 1 / this.current;
+			this.$display.html(this.current);	
+		}
+		else
+		{
+			alert("Division by zero error");
+		}
+		
 	}
 
 	invertHandler()

@@ -199,8 +199,7 @@
 			"action": "addition",
 			"description": "Addition",
 			"key": "+",
-			"background": "gray",
-			"width": 2
+			"background": "gray"
 		},
     
 	    {
