@@ -57,7 +57,7 @@ class Calculator
 		$element.on("percent", this.percentHandler.bind(this));
 		$element.on("reciprocal", this.reciprocalHandler.bind(this));
 		$element.on("invert-sign", this.invertHandler.bind(this));
-		
+		$element.on("result", this.resultHandler.bind(this));
 		
 //генерация кнопок
 		this.buttons = json.buttons;
@@ -253,5 +253,10 @@ class Calculator
 	{
 		this.current *= -1;
 		this.$display.html(this.current);
+	}
+
+	resultHandler()
+	{
+		this.resolveAction();
 	}
 }
