@@ -127,13 +127,13 @@ class Calculator
 //обработчик нажатий на стирание
 	inputClearHandler()
 	{
-		this.last = undefined;
 		this.toAddPoint = false;
 		this.isFraction = false;
+		this.removeLast();
 		this.isResult = false;
 		this.current = 0;
 		this.action = "";
-		this.removeLast();
+		this.$display.html(this.current);
 	}
 //обработчик нажатий на кнопки стирания последнего
 	clearLastHandler(event)
@@ -176,7 +176,7 @@ class Calculator
 		this.isResult = true;
 		this.last = undefined;
 		this.$lastDisplay.html("");
-		this.$display.html(this.current);	
+		this.$display.html(this.current);
 	}
 //сложение
 	additionHandler()
