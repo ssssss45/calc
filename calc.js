@@ -16,18 +16,18 @@ class Calculator
 		let $element = $(json.container_class);
 		let columns = json.columns;
 		let currentColumn = 0;
-		let pixelSize = json.pixels_per_size_unit;
+		let pixelsPerSizeUnit = json.pixels_per_size_unit;
 //генерация элемента в котором будет текст
 		this.$display = $('<div/>')
-			.css("width", columns * pixelSize)
-			.css("height", pixelSize)
+			.css("width", columns * pixelsPerSizeUnit)
+			.css("height", pixelsPerSizeUnit)
 			.html(0);
 		$element.append(this.$display);
 		$element.append('<br>');
 //генерация элемента в котором будет предыдущий элемент
 		this.$lastDisplay = $('<div/>')
-			.css("width", columns * pixelSize)
-			.css("height", pixelSize)
+			.css("width", columns * pixelsPerSizeUnit)
+			.css("height", pixelsPerSizeUnit)
 			.html("");
 		$element.append(this.$lastDisplay);
 		$element.append('<br>');
@@ -42,6 +42,8 @@ class Calculator
 		this.isResult = false;
 //текущее действие
 		this.action = "";
+//обхект с событями для клавиатуры
+		this.keyEvents = {};
 //слушатели
 		$element.on("key", this.keyPressedHandler.bind(this));
 		$element.on("remove-last", this.clearLastHandler.bind(this));
@@ -58,33 +60,51 @@ class Calculator
 		$element.on("reciprocal", this.reciprocalHandler.bind(this));
 		$element.on("invert-sign", this.invertHandler.bind(this));
 		$element.on("result", this.resultHandler.bind(this));
+
+		$(document).keydown(this.keypressHandler.bind(this));
+		this.$element = $element;
 		
 //генерация кнопок
 		this.buttons = json.buttons;
 		for (var i = 0; i < this.buttons.length; i++)
 		{
-			let event = jQuery.Event(this.buttons[i].action || "key");
-			event.keyValue = this.buttons[i].value;
+			let $event = jQuery.Event(this.buttons[i].action || "key");
+			$event.keyValue = this.buttons[i].value;
 
 			let width = this.buttons[i].width || 1;
 			let height = this.buttons[i].height || 1;
 			currentColumn += width;
+//добавление слушателей на клавиатуру
+			if (this.buttons[i].key != "")
+			{
+				this.keyEvents[this.buttons[i].key] = $event;
+			}
 
 			let button = $('<input/>')
 				.attr({ type: 'button', value:this.buttons[i].label, title: this.buttons[i].description})
-				.click(function(){$element.trigger(event)})
-				.css("width", width * pixelSize)
-				.css("height", height * pixelSize)
+				.click(function(){$element.trigger($event)})
+				.css("width", width * pixelsPerSizeUnit)
+				.css("height", height * pixelsPerSizeUnit)
 				.css("background-color", this.buttons[i].background);
 			$element.append(button);
 
 			if (currentColumn == columns)
 			{
 				$element.append('<br>');		
-				currentColumn = 0;		
+				currentColumn = 0;		1
 			}
 		}
 	}
+
+	keypressHandler(event)
+	{
+		console.log(event.key)
+		if (this.keyEvents[event.key] != undefined)
+		{
+			this.$element.trigger(this.keyEvents[event.key])	
+		}
+	}
+
 //обработчик нажатия на цифровые кнопки
 	keyPressedHandler(event)
 	{
@@ -113,10 +133,10 @@ class Calculator
 		this.isFraction = false;
 		this.isResult = false;
 		this.current = 0;
-		this.$display.html(this.current);
+		this.removeLast();
 	}
 //обработчик нажатий на кнопки стирания последнего
-	clearLastHandler()
+	clearLastHandler(event)
 	{
 		let temp = this.current.toString();
 		temp = temp.substring(0, temp.length - 1);
@@ -168,11 +188,12 @@ class Calculator
 		}
 		else
 		{
-			this.resolveAction();		
+			this.resolveAction();
+			this.action = " +";
 		}
 	}
 
-	substractionHandler()
+	substractionHandler(event)
 	{
 		if (this.last == undefined)
 		{
@@ -182,11 +203,11 @@ class Calculator
 		else
 		{
 			this.resolveAction();
+			this.action = " -";
 		}
-
 	}
 
-	multiplyHandler()
+	multiplyHandler(event)
 	{
 		if (this.last == undefined)
 		{
@@ -196,10 +217,11 @@ class Calculator
 		else
 		{
 			this.resolveAction();
+			this.action = " *";
 		}
 	}
 
-	divisionHandler()
+	divisionHandler(event)
 	{
 		if (this.last == undefined)
 		{
@@ -211,10 +233,11 @@ class Calculator
 			if (this.current != 0)
 			{
 				this.resolveAction();
+				this.action = " /";
 			}
 			else
 			{
-				alert("Division by zero error");
+				this.zeroDivisonHandler();
 			}
 		}
 	}
@@ -228,10 +251,11 @@ class Calculator
 			case " *": this.current = this.last * this.current; break;
 			case " /": this.current = this.last / this.current; break;
 		}
+		this.$display.html
 		this.removeLast();
 	}
 
-	percentHandler()
+	percentHandler(event)
 	{
 		this.current /= 100;
 		this.$display.html(this.current);
@@ -252,13 +276,13 @@ class Calculator
 		}
 		else
 		{
-			alert("Division by zero error");
+			this.zeroDivisonHandler();
 		}
-		
 	}
 
 	invertHandler()
 	{
+
 		this.current *= -1;
 		this.$display.html(this.current);
 	}
@@ -266,5 +290,10 @@ class Calculator
 	resultHandler()
 	{
 		this.resolveAction();
+	}
+
+	zeroDivisonHandler()
+	{
+		alert("Division by zero error");
 	}
 }

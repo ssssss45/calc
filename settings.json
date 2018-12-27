@@ -18,7 +18,7 @@
 			"label": "←",
 			"action": "remove-last",
 			"description": "Remove the last digit",
-			"key": "backspace",
+			"key": "Backspace",
 			"width": 2,
 			"height": 1,
 			"background": "gray"
@@ -206,7 +206,7 @@
 			"label": "=",
 			"action": "result",
 			"description": "Show Result",
-			"key": "enter",
+			"key": "Enter",
 			"background": "gray",
 			"width": 1
 		}
