@@ -42,7 +42,7 @@ class Calculator
 		this.isResult = false;
 //текущее действие
 		this.action = "";
-//обхект с событями для клавиатуры
+//объект с событями для клавиатуры
 		this.keyEvents = {};
 //слушатели
 		$element.on("key", this.keyPressedHandler.bind(this));
@@ -60,7 +60,7 @@ class Calculator
 		$element.on("reciprocal", this.reciprocalHandler.bind(this));
 		$element.on("invert-sign", this.invertHandler.bind(this));
 		$element.on("result", this.resultHandler.bind(this));
-
+//слушатель на нажатия кнопки
 		$(document).keydown(this.keypressHandler.bind(this));
 		this.$element = $element;
 		
@@ -79,7 +79,7 @@ class Calculator
 			{
 				this.keyEvents[this.buttons[i].key] = $event;
 			}
-
+//генерация кнопок, добавление стиля, добавление их в контейнер
 			let button = $('<input/>')
 				.attr({ type: 'button', value:this.buttons[i].label, title: this.buttons[i].description})
 				.click(function(){$element.trigger($event)})
@@ -95,10 +95,9 @@ class Calculator
 			}
 		}
 	}
-
+//обработчик нажатия на клавиатуру
 	keypressHandler(event)
 	{
-		console.log(event.key)
 		if (this.keyEvents[event.key] != undefined)
 		{
 			this.$element.trigger(this.keyEvents[event.key])	
@@ -133,6 +132,7 @@ class Calculator
 		this.isFraction = false;
 		this.isResult = false;
 		this.current = 0;
+		this.action = "";
 		this.removeLast();
 	}
 //обработчик нажатий на кнопки стирания последнего
@@ -162,7 +162,7 @@ class Calculator
 			this.toAddPoint = true;	
 		}
 	}
-
+//передвижение текущего числа в предыдущее
 	pushToLast()
 	{
 		this.last = this.current;
@@ -178,7 +178,7 @@ class Calculator
 		this.$lastDisplay.html("");
 		this.$display.html(this.current);	
 	}
-
+//сложение
 	additionHandler()
 	{
 		if ((this.last == undefined))
@@ -192,7 +192,7 @@ class Calculator
 			this.action = " +";
 		}
 	}
-
+//вычитание
 	substractionHandler(event)
 	{
 		if (this.last == undefined)
@@ -206,7 +206,7 @@ class Calculator
 			this.action = " -";
 		}
 	}
-
+//умножение
 	multiplyHandler(event)
 	{
 		if (this.last == undefined)
@@ -220,7 +220,7 @@ class Calculator
 			this.action = " *";
 		}
 	}
-
+//деление
 	divisionHandler(event)
 	{
 		if (this.last == undefined)
@@ -230,18 +230,11 @@ class Calculator
 		}
 		else
 		{
-			if (this.current != 0)
-			{
-				this.resolveAction();
-				this.action = " /";
-			}
-			else
-			{
-				this.zeroDivisonHandler();
-			}
+			this.resolveAction();
+			this.action = " /";
 		}
 	}
-
+//выполнение текущего действия
 	resolveAction()
 	{
 		switch (this.action)
@@ -249,24 +242,33 @@ class Calculator
 			case " +": this.current = this.last + this.current; break;
 			case " -": this.current = this.last - this.current; break;
 			case " *": this.current = this.last * this.current; break;
-			case " /": this.current = this.last / this.current; break;
+			case " /":
+				if (this.current == 0)
+				{
+					this.zeroDivisonHandler();
+				}
+				else
+				{
+					this.current = this.last / this.current;	
+				}
+			break;
 		}
 		this.$display.html
 		this.removeLast();
 	}
-
+//получение процента
 	percentHandler(event)
 	{
 		this.current /= 100;
 		this.$display.html(this.current);
 	}
-
+//квадратный корень
 	squareHandler()
 	{
 		this.current = Math.sqrt(this.current);
 		this.$display.html(this.current);	
 	}
-
+//обратное число
 	reciprocalHandler()
 	{
 		if (this.current != 0)
@@ -279,19 +281,22 @@ class Calculator
 			this.zeroDivisonHandler();
 		}
 	}
-
+//инверсия
 	invertHandler()
 	{
 
 		this.current *= -1;
 		this.$display.html(this.current);
 	}
-
+//результат (кнопка равно)
 	resultHandler()
 	{
-		this.resolveAction();
+		if (this.last != undefined)
+		{
+			this.resolveAction();	
+		}
 	}
-
+//обработчик деления на ноль
 	zeroDivisonHandler()
 	{
 		alert("Division by zero error");
